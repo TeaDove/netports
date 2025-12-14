@@ -2,6 +2,7 @@ package netports
 
 import (
 	"fmt"
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,7 +11,7 @@ import (
 func TestPortRange(t *testing.T) {
 	t.Parallel()
 
-	ssh, ok := KnownPorts.GroupByProto(TCP)[22]
+	ssh, ok := KnownPorts.GroupByNumber()[22]
 	assert.True(t, ok)
 	assert.Len(t, ssh, 1)
 
@@ -22,6 +23,15 @@ func TestPortRange(t *testing.T) {
 }
 
 func ExamplePorts() {
-	fmt.Printf("%d %d", len(KnownPorts.GroupByProto(TCP)), len(KnownPorts.GroupByProto(UDP)))
-	// Output: 18015 13036
+	fmt.Printf("%d %d",
+		len(slices.Collect(KnownPorts.Filter(
+			FilterByProto(TCP),
+			FilterByCategory(CategoryWellKnown, CategoryRegistered),
+		))),
+		len(slices.Collect(KnownPorts.Filter(
+			FilterByProto(UDP),
+			FilterByCategory(CategoryWellKnown, CategoryRegistered),
+		))),
+	)
+	// Output: 2853 2448
 }

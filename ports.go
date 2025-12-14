@@ -10,13 +10,13 @@ var portsJson []byte
 
 type Port struct {
 	// Start
-	// Start and end range. Single port is represented as [port, port], i.e. {22, 22}
+	// Port number range start and end. Single port is represented as [port, port], i.e. {22, 22}
 	// multiple ports are represented as [min, max] included, i.e. {2001, 2009}
 	Start uint16 `json:"start"`
 	End   uint16 `json:"end"`
 
-	Category    string `json:"category"`
-	Description string `json:"description"`
+	Category    PortCategory `json:"category"`
+	Description string       `json:"description"`
 
 	Types map[PortProto]RegistrationStatus `json:"types"`
 }
@@ -33,6 +33,17 @@ func init() { //nolint: gochecknoinits // Too lazy too rewrite using gogenerate
 		panic(err)
 	}
 }
+
+type PortCategory string
+
+const (
+	// CategoryWellKnown (0-1024).
+	CategoryWellKnown PortCategory = "WellKnown"
+	// CategoryRegistered (1024-49151).
+	CategoryRegistered PortCategory = "Registered"
+	// CategoryOther (49152-65535).
+	CategoryOther PortCategory = "Other"
+)
 
 type PortProto string
 
@@ -63,27 +74,3 @@ const (
 	// The port number may be available for assignment upon request to IANA.
 	RegistrationReserved RegistrationStatus = "Reserved"
 )
-
-func (r Ports) GroupByProto(proto PortProto) map[uint16]Ports {
-	mapping := make(map[uint16]Ports, 1000)
-
-	for _, port := range r {
-		status, ok := port.Types[proto]
-		if !ok || status == RegistrationNo {
-			continue
-		}
-
-		portNum := port.Start
-		for {
-			mapping[portNum] = append(mapping[portNum], port)
-
-			if port.End == portNum {
-				break
-			}
-
-			portNum++
-		}
-	}
-
-	return mapping
-}
