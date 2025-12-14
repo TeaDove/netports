@@ -16,3 +16,17 @@ type Port struct {
 	Types map[PortProto]RegistrationStatus `json:"types"`
 }
 ```
+
+## Usage
+```shell
+go get github.com/TeaDove/tcp_udp_port_numbers
+```
+```go
+package main
+
+import "github.com/TeaDove/tcp_udp_port_numbers"
+
+func main(){
+    fmt.Printf("%+v\n", tcp_udp_port_numbers.KnownPorts()[0])
+}
+```

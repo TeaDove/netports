@@ -1,4 +1,4 @@
-package main
+package tcp_udp_port_numbers
 
 import (
 	"testing"
