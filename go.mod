@@ -1,4 +1,4 @@
-module github.com/teadove/tcp_udp_port_numbers
+module github.com/teadove/netports
 
 go 1.25
 

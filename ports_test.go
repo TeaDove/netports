@@ -1,6 +1,7 @@
-package tcp_udp_port_numbers
+package netports
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,4 +19,9 @@ func TestPortRange(t *testing.T) {
 		"Secure Shell (SSH), secure logins, file transfers (scp, sftp) and port forwarding",
 		ssh[0].Description,
 	)
+}
+
+func ExamplePorts() {
+	fmt.Printf("%d %d", len(KnownPorts.GroupByProto(TCP)), len(KnownPorts.GroupByProto(UDP)))
+	// Output: 18015 13036
 }

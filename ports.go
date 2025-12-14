@@ -1,4 +1,4 @@
-package tcp_udp_port_numbers
+package netports
 
 import (
 	_ "embed"
