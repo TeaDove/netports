@@ -23,6 +23,10 @@ func (r Ports) Filter(callbacks ...Filter) iter.Seq[Port] {
 	}
 }
 
+func (r Ports) FilterCollect(callbacks ...Filter) Ports {
+	return slices.Collect(r.Filter(callbacks...))
+}
+
 func FilterByProto(proto PortProto) Filter {
 	return func(port Port) bool {
 		status, ok := port.Types[proto]
